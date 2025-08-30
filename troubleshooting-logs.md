@@ -12,7 +12,7 @@ This log documents the step-by-step troubleshooting process for diagnosing and r
 - **Finding**: SMB sessions were short-lived due to Guest account limitations
 
 <!-- screenshot: Insert Event Viewer log showing SMB logon/logoff -->
-![Event Viewer Logs](vpn-remote-access-tally/screenshots/eventlogs.png)
+![Event Viewer Logs](vpn-remote-access-tally/screenshots/eventLogs.png)
 
 ---
 
