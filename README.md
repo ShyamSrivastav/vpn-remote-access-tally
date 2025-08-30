@@ -45,7 +45,7 @@ This project showcases the design and deployment of a secure, bidirectional remo
 
 ## 🏗️ Network Architecture Diagram
 
-![Architechture Diagram](https://github.com/user-attachments/assets/abb92f61-ddda-4a89-9b6c-5996d2a8061c)
+![Architechture Diagram](screenshots/NetworkArchitectureDiagram.webp)
 
 ---
 
@@ -84,7 +84,7 @@ Static route added:
 ### 🔍 SMB Transfer Failure
 - Initial file transfers failed with “socket closed” errors
 - Diagnosed short-lived SMB sessions via Event Viewer
-    - <!-- Refer to logs from August 30, 2025 between 21:30–21:45 IST  screenshot: Insert Event Viewer log showing SMB logon/logoff -->
+    ![Refer to logs](screenshots/eventLogs.png)
 
 ### 🔍 Guest Account Limitations
 - Identified that Guest account caused premature session termination
