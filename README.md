@@ -20,8 +20,30 @@ This project showcases the design and deployment of a secure, bidirectional remo
 - 🧑‍💻 Remote collaboration & real-world testing
 
 ---
+## 📂 Repository Structure
 
-## 🏗️ Architecture Diagram
+<details>
+  <summary>📁 Click to expand Repository Structure</summary>
+
+  ```mermaid
+    graph TD
+    A[vpn-remote-access-tally]
+    A --> B[README.md]
+    A --> C[configs/]
+    C --> C1[server.ovpn]
+    C --> C2[client.ovpn]
+    C --> C3[TallyGatewayServer.ini]
+    A --> D[firewall-rules.md]
+    A --> E[troubleshooting-log.md]
+    A --> F[screenshots/]
+    F --> F1[event-viewer-analysis.png]
+    F --> F2[architecture.png]
+  ```
+</details>
+
+---
+
+## 🏗️ Network Architecture Diagram
 
 ![Architechture Diagram](https://github.com/user-attachments/assets/abb92f61-ddda-4a89-9b6c-5996d2a8061c)
 
@@ -106,53 +128,6 @@ Static route added:
 - Finalize Tally license fetch by verifying binding and firewall rules  
 - Add monitoring/logging for VPN sessions  
 - Extend access to mobile devices with secure SMB clients  
-
----
-
-## 📂 Repository Structure (Suggested)
-
-<details>
-  <summary>📁 Click to expand Repository Structure</summary>
-
-  ```mermaid
-    graph TD
-    A[vpn-remote-access-tally]
-    A --> B[README.md]
-    A --> C[configs/]
-    C --> C1[server.ovpn]
-    C --> C2[client.ovpn]
-    C --> C3[TallyGatewayServer.ini]
-    A --> D[firewall-rules.md]
-    A --> E[troubleshooting-log.md]
-    A --> F[screenshots/]
-    F --> F1[event-viewer-analysis.png]
-    F --> F2[architecture.png]
-  ```
-</details>
-
----
-
-## 📸 Screenshot Tags
-
-To make your README visually compelling, consider embedding screenshots at these key points:
-
-- ✅ **Network architecture diagram**  
-- ✅ **Event Viewer logs** (Aug 30, 2025, 21:30–21:45 IST)  
-- ✅ **Successful SMB access from mobile**  
-- ✅ **Static route configuration on router**  
-- ✅ **Tally license server config file**  
-
----
-
-## 🛠️ Status Overview
-
-| Component                | Status       | Notes                                                       |
-|--------------------------|--------------|-------------------------------------------------------------|
-| VPN Tunnel               | ✅ Working   | TCP-based, stable across geographic distance                |
-| SMB Access (Mobile)      | ✅ Working   | Successful via mobile file manager with credentials         |
-| SMB Access (Remote PC)   | ❌ Pending   | Mapping fails due to Windows credential handling            |
-| Tally License Access     | ❌ Pending   | Port 10000 reachable, but license fetch not working         |
-| Routing to Remote LAN    | ✅ Working   | Static route + IP forwarding enabled                        |
 
 ---
 
