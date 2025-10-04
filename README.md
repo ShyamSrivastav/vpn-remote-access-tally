@@ -120,14 +120,3 @@ Static route added:
 - How to collaborate remotely and simulate enterprise-grade access control  
 
 ---
-
-## 🚀 Future Improvements
-
-- Automate VPN IP assignment using `client-config-dir`  
-- Resolve SMB access from remote PC via forced credential prompt  
-- Finalize Tally license fetch by verifying binding and firewall rules  
-- Add monitoring/logging for VPN sessions  
-- Extend access to mobile devices with secure SMB clients  
-
----
-
