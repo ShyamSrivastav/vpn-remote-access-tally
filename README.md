@@ -106,7 +106,7 @@ Static route added:
 |--------------------------|--------------|-------------------------------------------------------------|
 | VPN Tunnel               | ✅ Working   | TCP-based, stable across geographic distance                |
 | SMB Access (Mobile)      | ✅ Working   | Successful via mobile file manager with credentials         |
-| SMB Access (Remote PC)   | ❌ Pending   | Mapping fails due to Windows credential handling            |
+| SMB Access (Remote PC)   | ✅ Working   | Mapping fails due to Windows credential handling            |
 | Tally License Access     | ❌ Pending   | Port 10000 reachable, but license fetch not working         |
 | Routing to Remote LAN    | ✅ Working   | Static route + IP forwarding enabled                        |
 
