@@ -42,7 +42,7 @@ This log documents the step-by-step troubleshooting process for diagnosing and r
 
 ## 🔍 Outstanding Issues
 
-- ❌ SMB access from brother’s PC still fails due to Windows credential handling
+- ✅ SMB access from brother’s PC still fails due to Windows credential handling. To resolve the issue, I created a new user account in Windows with credentials.
 - ❌ Tally license fetch pending final verification
 
 ---
