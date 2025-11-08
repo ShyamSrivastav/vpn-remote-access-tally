@@ -1,29 +1,29 @@
 # vpn-remote-access-tally
 Secure remote access infrastructure using OpenVPN, SMB, and Tally Prime
 
-# 🛡️ Remote Access Infrastructure for Tally & SMB over OpenVPN
+# Remote Access Infrastructure for Tally & SMB over OpenVPN
 
-## 📌 Project Overview
+## Project Overview
 
 This project showcases the design and deployment of a secure, bidirectional remote access system using **OpenVPN**, **Windows SMB file sharing**, and **Tally Prime license server routing**. The goal was to enable a remote user (my brother) to access my home PC’s shared folders and Tally license server from a different city (200+ km away) over a VPN tunnel, with full authentication, file transfer, and application-level access.
 
 ---
 
-## 🧠 Skills Demonstrated
+## Skills Demonstrated
 
-- 🔧 Network architecture & VPN tunneling (OpenVPN TCP)
-- 🔐 Windows Firewall configuration & port-based access control
-- 🗂️ SMB file sharing with credentialed access
-- 🧪 Event Viewer analysis & troubleshooting
-- 🧭 Static routing across subnets
-- 🧰 Tally Prime license server configuration
-- 🧑‍💻 Remote collaboration & real-world testing
+- Network architecture & VPN tunnelling (OpenVPN TCP)
+- Windows Firewall configuration & port-based access control
+- SMB file sharing with credentialed access
+- Event Viewer analysis & troubleshooting
+- Static routing across subnets
+- Tally Prime license server configuration
+- Remote collaboration & real-world testing
 
 ---
-## 📂 Repository Structure
+## Repository Structure
 
 <details>
-  <summary>📁 Click to expand Repository Structure</summary>
+  <summary>Click to expand Repository Structure</summary>
 
   ```mermaid
     graph TD
@@ -43,26 +43,26 @@ This project showcases the design and deployment of a secure, bidirectional remo
 
 ---
 
-## 🏗️ Network Architecture Diagram
+## Network Architecture Diagram
 
 ![Architechture Diagram](screenshots/NetworkArchitectureDiagram.webp)
 
 ---
 
-## 🔧 Key Components
+## Key Components
 
-### ✅ VPN Configuration
+### VPN Configuration
 - Protocol: **TCP** (for reliable file transfer)
 - Subnet: `10.8.0.0/24`
 - MTU Optimization: `tun-mtu 1400`, `mssfix 1360`
 - Static IP assignment for consistent routing
 
-### ✅ SMB File Sharing
+### SMB File Sharing
 - Created a **dedicated Windows user** (`vpnuser`) with read/write access
 - Shared folders configured for authenticated access
 - Mapped network drives from a remote PC using credentials
 
-### ✅ Tally License Server Access
+### Tally License Server Access
 - Configured `TallyGatewayServer.ini`:
   ```ini
   ServerPort=10000
@@ -71,7 +71,7 @@ This project showcases the design and deployment of a secure, bidirectional remo
 - Allowed port 10000 in Windows Firewall
 - Verified license fetch over VPN (pending final success)
 
-### ✅ Routing & Firewall
+### Routing & Firewall
 Static route added:
 - Destination: 192.168.1.0
 - Subnet Mask: 255.255.255.0
@@ -80,28 +80,28 @@ Static route added:
 
 ---
 
-## 🧪 Troubleshooting Journey
-### 🔍 SMB Transfer Failure
+## Troubleshooting Journey
+### SMB Transfer Failure
 - Initial file transfers failed with “socket closed” errors
 - Diagnosed short-lived SMB sessions via Event Viewer
     ![Refer to logs](screenshots/eventLogs.png)
 
-### 🔍 Guest Account Limitations
+### Guest Account Limitations
 - Identified that Guest account caused premature session termination
 - Created vpnuser with full access to resolve
 
-### 🔍 VPN Protocol Optimization
+### VPN Protocol Optimization
 - Switched from UDP to TCP to stabilize large file transfers
 - Resulted in successful media file transfer and playback
 
-### 🔍 Routing Failures
+### Routing Failures
 - Static route initially misconfigured with subnet as gateway
 - Corrected to use 10.8.0.14 (brother’s VPN IP)
 - Enabled IP forwarding on remote PC to allow LAN-to-LAN routing
 
 ---
 
-## ✅ Current Status
+## Current Status
 | Component                | Status       | Notes                                                       |
 |--------------------------|--------------|-------------------------------------------------------------|
 | VPN Tunnel               | ✅ Working   | TCP-based, stable across geographic distance                |
@@ -112,7 +112,7 @@ Static route added:
 
 ---
 
-## 📈 What I Learned
+## What I Learned
 
 - How to design and secure a multi-subnet VPN infrastructure  
 - How Windows handles SMB sessions, authentication, and firewall rules  
