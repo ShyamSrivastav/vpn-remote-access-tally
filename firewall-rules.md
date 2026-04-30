@@ -1,10 +1,10 @@
-# 🔐 Firewall Rules for VPN + SMB + Tally Access
+# Firewall Rules for VPN + SMB + Tally Access
 
 This document outlines the firewall rules configured on the host PC to enable secure and uninterrupted access to shared folders and the Tally license server over OpenVPN.
 
 ---
 
-## ✅ Inbound Rules
+## Inbound Rules
 
 ### 1. OpenVPN (TCP Port 1194)
 - **Protocol**: TCP  
@@ -36,7 +36,7 @@ This document outlines the firewall rules configured on the host PC to enable se
 
 ---
 
-## 🔧 Notes
+## Notes
 
 - All rules were created using **Windows Defender Firewall → Advanced Settings**
 - Rules apply only to **Private network profile** to avoid exposure on public networks
