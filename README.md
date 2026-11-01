@@ -1,122 +1,106 @@
-# vpn-remote-access-tally
-Secure remote access infrastructure using OpenVPN, SMB, and Tally Prime
+# Remote Access over OpenVPN: SMB Shares & Tally Prime
 
-# Remote Access Infrastructure for Tally & SMB over OpenVPN
+Secure remote access setup using **OpenVPN**, **Windows SMB** and **Tally Prime license-server routing**, built and troubleshot across two home networks in different cities.
 
-## Project Overview
-
-This project showcases the design and deployment of a secure, bidirectional remote access system using **OpenVPN**, **Windows SMB file sharing**, and **Tally Prime license server routing**. The goal was to enable a remote user (my brother) to access my home PC’s shared folders and Tally license server from a different city (200+ km away) over a VPN tunnel, with full authentication, file transfer, and application-level access.
+> **Scope:** A hands-on networking project built for learning and real-world use. Config files in this repo are sanitised samples. They contain no keys, certificates or real public IPs.
 
 ---
 
-## Skills Demonstrated
+## Overview
 
-- Network architecture & VPN tunnelling (OpenVPN TCP)
-- Windows Firewall configuration & port-based access control
-- SMB file sharing with credentialed access
-- Event Viewer analysis & troubleshooting
-- Static routing across subnets
-- Tally Prime license server configuration
-- Remote collaboration & real-world testing
+A remote user's PC, more than 200 km away, needed to reach shared folders and a Tally Prime license server hosted on my home PC. I designed and deployed an OpenVPN tunnel between the two networks, configured authenticated SMB access and firewall rules, and worked through routing and session failures using Windows Event Viewer.
 
----
-## Repository Structure
-
-<details>
-  <summary>Click to expand Repository Structure</summary>
-
-  ```mermaid
-    graph TD
-    A[vpn-remote-access-tally]
-    A --> B[README.md]
-    A --> C[configs/]
-    C --> C1[server.ovpn]
-    C --> C2[client.ovpn]
-    C --> C3[TallyGatewayServer.ini]
-    A --> D[firewall-rules.md]
-    A --> E[troubleshooting-log.md]
-    A --> F[screenshots/]
-    F --> F1[event-viewer-analysis.png]
-    F --> F2[architecture.png]
-  ```
-</details>
+**Skills demonstrated:** OpenVPN (TCP) · static routing across subnets · Windows Firewall rules · SMB with credentialed access · Event Viewer log analysis · systematic troubleshooting
 
 ---
 
-## Network Architecture Diagram
+## Network Architecture
 
-![Architechture Diagram](screenshots/NetworkArchitectureDiagram.webp)
+![Network architecture diagram](screenshots/NetworkArchitectureDiagram.webp)
 
----
-
-## Key Components
-
-### VPN Configuration
-- Protocol: **TCP** (for reliable file transfer)
-- Subnet: `10.8.0.0/24`
-- MTU Optimization: `tun-mtu 1400`, `mssfix 1360`
-- Static IP assignment for consistent routing
-
-### SMB File Sharing
-- Created a **dedicated Windows user** (`vpnuser`) with read/write access
-- Shared folders configured for authenticated access
-- Mapped network drives from a remote PC using credentials
-
-### Tally License Server Access
-- Configured `TallyGatewayServer.ini`:
-  ```ini
-  ServerPort=10000
-  ServerBind=0.0.0.0
-
-- Allowed port 10000 in Windows Firewall
-- Verified license fetch over VPN (pending final success)
-
-### Routing & Firewall
-Static route added:
-- Destination: 192.168.1.0
-- Subnet Mask: 255.255.255.0
-- Gateway: 10.8.0.14
-- Firewall rules scoped to allow traffic from 10.8.0.0/24
+| Item | Value |
+|---|---|
+| VPN subnet | `10.8.0.0/24` |
+| Host LAN (Tally server + shares) | `192.168.0.0/24` |
+| Remote LAN | `192.168.1.0/24` |
+| Protocol | OpenVPN over TCP, port `1194` |
+| MTU tuning | `tun-mtu 1400`, `mssfix 1360` |
 
 ---
 
-## Troubleshooting Journey
-### SMB Transfer Failure
-- Initial file transfers failed with “socket closed” errors
-- Diagnosed short-lived SMB sessions via Event Viewer
-    ![Refer to logs](screenshots/eventLogs.png)
+## What I Configured
 
-### Guest Account Limitations
-- Identified that Guest account caused premature session termination
-- Created vpnuser with full access to resolve
+**VPN**
+- OpenVPN server and client with certificate-based authentication
+- TCP transport chosen for reliable large-file transfers (see troubleshooting)
+- Routes pushed for both LANs
 
-### VPN Protocol Optimization
-- Switched from UDP to TCP to stabilize large file transfers
-- Resulted in successful media file transfer and playback
+**SMB file sharing**
+- Dedicated Windows user (`vpnuser`) with read/write access to the shared folders
+- Network drives mapped from the remote side using credentials
 
-### Routing Failures
-- Static route initially misconfigured with subnet as gateway
-- Corrected to use 10.8.0.14 (brother’s VPN IP)
-- Enabled IP forwarding on remote PC to allow LAN-to-LAN routing
+**Tally Prime license server**
+- `TallyGatewayServer.ini` set to `ServerPort=10000`, `ServerBind=0.0.0.0`
+- Port 10000 allowed in Windows Firewall, scoped to the VPN subnet
+
+**Routing**
+- Static route on the host PC: `192.168.1.0` / `255.255.255.0` via `10.8.0.14` (the remote client's VPN address)
+- IP forwarding enabled on the remote PC to allow LAN-to-LAN traffic
+
+---
+
+## Security Considerations
+
+- **Least-privilege access:** a dedicated, credentialed `vpnuser` account replaced anonymous Guest access.
+- **Scoped firewall rules:** rules allow traffic only from the VPN subnet `10.8.0.0/24`. Details are in [`firewall-rules.md`](firewall-rules.md).
+
+---
+
+## Troubleshooting Log
+
+Full notes are in [`troubleshooting-logs.md`](troubleshooting-logs.md).
+
+| Symptom | Diagnosis | Resolution |
+|---|---|---|
+| SMB transfers failed with "socket closed" errors | Event Viewer showed SMB sessions terminating prematurely ([evidence](screenshots/eventLogs.png)) | Replaced Guest access with the dedicated `vpnuser` account |
+| Large file transfers unstable over the tunnel | UDP transport dropped long-running transfers | Switched OpenVPN from UDP to TCP, after which media files transferred and played back successfully |
+| Remote LAN unreachable | Static route was created with the subnet as its gateway | Corrected the gateway to the remote client's VPN IP (`10.8.0.14`) and enabled IP forwarding on the remote PC |
 
 ---
 
 ## Current Status
-| Component                | Status       | Notes                                                       |
-|--------------------------|--------------|-------------------------------------------------------------|
-| VPN Tunnel               | ✅ Working   | TCP-based, stable across geographic distance                |
-| SMB Access (Mobile)      | ✅ Working   | Successful via mobile file manager with credentials         |
-| SMB Access (Remote PC)   | ✅ Working   | Mapping fails due to Windows credential handling            |
-| Tally License Access     | ❌ Pending   | Port 10000 reachable, but license fetch not working         |
-| Routing to Remote LAN    | ✅ Working   | Static route + IP forwarding enabled                        |
+
+| Component | Status | Notes |
+|---|---|---|
+| VPN tunnel | ✅ Working | TCP-based, stable across the distance |
+| SMB access (mobile) | ✅ Working | Via a mobile file manager with credentials |
+| SMB access (remote PC) | ⚠️ Partial | Drive mapping fails because of Windows credential handling |
+| Routing to remote LAN | ✅ Working | Static route and IP forwarding in place |
+| Tally license access | ❌ Open | Port 10000 is reachable, but the license fetch does not complete |
+
+---
+
+## Repository Structure
+
+```
+vpn-remote-access-tally/
+├── README.md
+├── configs/
+│   ├── server.ovpn              # sanitised sample
+│   ├── client.ovpn              # sanitised sample
+│   └── TallyGatewayServer.ini
+├── firewall-rules.md
+├── troubleshooting-logs.md
+└── screenshots/
+    ├── NetworkArchitectureDiagram.webp
+    └── eventLogs.png
+```
 
 ---
 
 ## What I Learned
 
-- How to design and secure a multi-subnet VPN infrastructure  
-- How Windows handles SMB sessions, authentication, and firewall rules  
-- How to debug application-level failures using system logs and network traces  
-- How to collaborate remotely and simulate enterprise-grade access control  
-
----
+- How routing, firewall scope and VPN transport choices interact across two private subnets
+- How Windows SMB handles sessions and authentication, and what failed sessions look like in Event Viewer
+- Isolating a fault layer by layer (tunnel, routing, firewall, application) instead of changing several things at once
+- Documenting a problem, its diagnosis and its fix so that someone else can reproduce it
